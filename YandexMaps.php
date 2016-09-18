@@ -3,13 +3,15 @@ namespace irim\yandex\maps;
 
 class YandexMaps extends \yii\base\Widget{
     
-    public $addresses;
-    public $cityLat;
-    public $cityLon;
+    public $datas = [],
+        $map_id = 'map',
+        $coords = '55.75396,37.620393',
+        $zoom = 10,
+        $controls = [];
 
     public function init(){
         parent::init();
-        $this->addresses = \yii\helpers\ArrayHelper::toArray($this->addresses);
+        $this->datas = \yii\helpers\ArrayHelper::toArray($this->datas);
         $this->registerClientScript();
     }
 
@@ -18,36 +20,23 @@ class YandexMaps extends \yii\base\Widget{
     }
 
     public function registerClientScript(){
-        $countPlaces = count($this->addresses);
-        $items  = [];
-        $i      = 0;
-        foreach ($this->addresses as $one) {
-            $items[$i]['address']   = $one['address'];
-            $items[$i]['latitude']  = $one['latitude'];
-            $items[$i]['longitude'] = $one['longitude'];
-            $i++;
-        }
         $view = $this->getView();
-
         YandexMapsAsset::register($view);
-
         $js = '
             ymaps.ready(function(){
-                myMap = new ymaps.Map("map", {
-                    center: ['.$this->cityLat.','.$this->cityLon.'],
-                    zoom: 10,
-                    controls: []
+                myMap = new ymaps.Map("'.$this->map_id.'",{
+                    center: ['.$this->coords.'],
+                    zoom:'.$this->zoom.',
+                    controls:['.implode(',',$this->controls).']
                 });
                 
                 myMap.behaviors.disable("scrollZoom");
-                myMap.controls.add("zoomControl", {top:75,left:5});
+                myMap.controls.add("zoomControl", { top: 75, left: 5 });
         
-                var addresses = '.json_encode($items).';
-        
-                for (var i = 0; i < '.$countPlaces.'; i++){
-                    myPlacemark = new ymaps.Placemark([addresses[i]["latitude"], addresses[i]["longitude"]],{hintContent: addresses[i]["address"]},{iconColor: "#ff0000"});
-                    myMap.geoObjects.add(myPlacemark);
-                }
+                var datas = '.\yii\helpers\Json::encode($this->datas).';
+                datas.forEach(function(item){
+                    myMap.geoObjects.add(new ymaps.Placemark(item.coords.split(","),{hintContent:item.hint},{iconColor: "#ff0000"}));
+                });
             });';
         $view->registerJs($js);
     }
