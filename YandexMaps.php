@@ -32,8 +32,7 @@ class YandexMaps extends \yii\base\Widget{
         YandexMapsAsset::register($view);
 
         $js = '
-            var myMap,myPlacemark;
-            ymaps.ready(function(){     
+            ymaps.ready(function(){
                 myMap = new ymaps.Map("map", {
                     center: ['.$this->cityLat.','.$this->cityLon.'],
                     zoom: 10,
@@ -41,19 +40,15 @@ class YandexMaps extends \yii\base\Widget{
                 });
                 
                 myMap.behaviors.disable("scrollZoom");
-                myMap.controls.add("zoomControl", { top: 75, left: 5 });
+                myMap.controls.add("zoomControl", {top:75,left:5});
         
-                var addresses = "'.json_encode($items).'";
+                var addresses = '.json_encode($items).';
         
-                for (var i = 0; i < $countPlaces; i++) {
-                    myPlacemark = new ymaps.Placemark([addresses[i]["latitude"], addresses[i]["longitude"]], { 
-                        hintContent: "" + addresses[i]["address"] + "", 
-                    },
-                    {iconColor: "#ff0000"});
+                for (var i = 0; i < '.$countPlaces.'; i++){
+                    myPlacemark = new ymaps.Placemark([addresses[i]["latitude"], addresses[i]["longitude"]],{hintContent: addresses[i]["address"]},{iconColor: "#ff0000"});
                     myMap.geoObjects.add(myPlacemark);
                 }
-            });
-        ';
+            });';
         $view->registerJs($js);
     }
 }
