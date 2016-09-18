@@ -1,0 +1,28 @@
+{
+    "name": "irim/yii2-yandex-maps",
+    "description": "Работа с Yandex.Maps",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","widget","yandex","maps","rim"],
+    "license": "MIT",
+    "minimum-stability" : "dev",
+    "prefer-stable": true,
+    "support": {
+        "source": "https://github.com/iRim/yii2-yandex-maps"
+    },
+    "authors": [
+        {
+            "name": "Rim",
+            "email": "rusenko.i@ya.ru",
+            "homepage": "http://irim.info"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "irim\\yandex\\maps\\": ""
+        }
+    }
+}
