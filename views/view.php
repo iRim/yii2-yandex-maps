@@ -1,1 +1,1 @@
-<div id="map" style="width: 100%; height: 400px"></div>
+<div id="<?=$widget['id']?>" <?=(!empty($widget['style'])?'style="'.$widget['style'].'"':NULL)?>></div>
